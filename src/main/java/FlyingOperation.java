@@ -24,18 +24,16 @@ public class FlyingOperation {
 
     private String findMin(List<Ticket> list) {
         String departureTime = list.get(0).getDepartureTime();
-        String departureDate = list.get(0).getDepartureDate();
         String arrivalTime = list.get(0).getArrivalTime();
-        String arrivalDate = list.get(0).getArrivalDate();
 
-        var currentMin = getDeltaBetweenTwoTime(departureDate,arrivalDate,departureTime,arrivalTime);
+
+        var currentMin = getDeltaBetweenTwoTime(departureTime,arrivalTime);
         for( int i = 1; i < list.size(); i++){
             String depTime = list.get(i).getDepartureTime();
-            String depDate = list.get(i).getDepartureDate();
             String arrTime = list.get(i).getArrivalTime();
-            String arrDate = list.get(i).getArrivalDate();
 
-            var secondMin = getDeltaBetweenTwoTime(depDate,arrDate,depTime,arrTime);
+
+            var secondMin = getDeltaBetweenTwoTime(depTime,arrTime);
             if(currentMin.isAfter(secondMin)){
                 currentMin = secondMin;
             }
@@ -44,31 +42,18 @@ public class FlyingOperation {
         return String.valueOf(currentMin);
     }
 
-    private LocalDate getDeltaBetweenTwoTime(String departureDate, String arrivalDate, String departureTime, String arrivalTime) {
-
-        var currentDepartureDate = departureDate + " "  + departureTime;
-        var currentArrivalDate = arrivalDate + " "  + arrivalTime;
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
+    private LocalTime getDeltaBetweenTwoTime(String departureTime, String arrivalTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
+        LocalTime startTime = LocalTime.parse(departureTime, formatter);
+        LocalTime endTime = LocalTime.parse(arrivalTime, formatter);
 
 
-        Date actualDepartureTime = null;
-        Date actualArrivalTime = null;
-        try {
-            actualDepartureTime = dateFormat.parse(currentDepartureDate);
-            actualArrivalTime = dateFormat.parse(currentArrivalDate);
+        Duration duration = Duration.between(startTime, endTime);
 
-            long diffInMillies = Math.abs(actualArrivalTime.getTime() - actualDepartureTime.getTime());
-            int diffInDays = (int) TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            int diffInHours = (int) TimeUnit.HOURS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            int diffInMinutes = (int) TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        int hours = (int) duration.toHours();
+        int minutes = (int) (duration.toMinutes() % 60);
 
-
-            return LocalDate.of(diffInDays,diffInHours,(diffInMinutes % 60));
-        } catch (ParseException e) {
-           throw new RuntimeException("Не удалось распарсить дату и время");
-
-        }
+        return LocalTime.of(hours, minutes);
     }
 
     public Map<String, List<Ticket>> collectCarrierToTicketMap(List<Ticket> list) {
