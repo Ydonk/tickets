@@ -18,7 +18,7 @@ public class PriceCalculation {
         var avg = calculateAvgPrice();
         var median = calculateMedian();
 
-        return Math.abs(median - avg);
+        return (avg - median);
     }
 
     public void setStringListMap(List<Ticket> ticketList) {

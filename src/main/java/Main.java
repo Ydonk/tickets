@@ -39,7 +39,7 @@ public class Main {
 
             var currentMap =  flyingOperation.collectCarrierToTicketMap(relevantTickets);
             var resultMap =  flyingOperation.minimumTimeToFly(currentMap);
-            priceCalculation.setStringListMap(tickets.getTicketList());
+            priceCalculation.setStringListMap(relevantTickets);
             var diffAvgAndMedian =  priceCalculation.diffAvgAndMedian();
 
 
