@@ -1,5 +1,7 @@
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 //- Разницу между средней ценой
@@ -25,24 +27,24 @@ public class PriceCalculation {
     }
 
     private Double calculateAvgPrice() {
-        return stringLis.stream().map(Ticket::getPrice)
+        var sum =  stringLis.stream().map(Ticket::getPrice)
                 .mapToDouble(el -> el)
-                .summaryStatistics()
-                .getAverage();
+                .sum();
+
+        return  (sum / stringLis.size());
     }
 
     private Double calculateMedian() {
         int size = stringLis.size();
         var value = stringLis.stream().map(Ticket::getPrice).sorted().collect(Collectors.toList());
-
-
+        value.forEach(System.out::println);
         if (value.size() % 2 == 0) {
-            return (value.get(size / 2 - 1) + value.get(size / 2) / 2.0);
+            return  (value.get(value.size() / 2 - 1) + value.get(value.size() / 2) / 2.0);
 
         } else {
             return Double.valueOf((value.get(size / 2)));
-
         }
 
     }
 }
+

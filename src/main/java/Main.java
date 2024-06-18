@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Main {
-    private static final FlyingOperation flyingOperation = new FlyingOperation();
-    private static final PriceCalculation priceCalculation = new  PriceCalculation();
+    private static FlyingOperation flyingOperation = new FlyingOperation();
+    private static PriceCalculation priceCalculation = new  PriceCalculation();
 
 
 
@@ -39,7 +39,7 @@ public class Main {
 
             var currentMap =  flyingOperation.collectCarrierToTicketMap(relevantTickets);
             var resultMap =  flyingOperation.minimumTimeToFly(currentMap);
-            priceCalculation.setStringListMap(relevantTickets);
+            priceCalculation.setStringListMap(tickets.getTicketList());
             var diffAvgAndMedian =  priceCalculation.diffAvgAndMedian();
 
 
@@ -57,4 +57,5 @@ public class Main {
 
 
 }
+
 
