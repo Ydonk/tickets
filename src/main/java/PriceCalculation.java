@@ -1,76 +1,48 @@
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 //- Разницу между средней ценой
 // и медианой для полета между городами  Владивосток и Тель-Авив
 
 public class PriceCalculation {
-    private Map<String, List<Ticket>> stringListMap;
+    private List<Ticket> stringLis;
 
 
     public PriceCalculation() {
     }
 
-    public Map<String,String> diffAvgAndMedian() {
-
-        var resultMap = new HashMap<String,String>();
+    public Double diffAvgAndMedian() {
         var avg = calculateAvgPrice();
         var median = calculateMedian();
 
-
-
-        for(var entry : median.entrySet()){
-            var key = entry.getKey();
-            var valMedian = entry.getValue();
-            var valAvg = avg.get(key);
-            resultMap.put(key, String.valueOf((valMedian - valAvg)));
-        }
-       return resultMap;
+        return Math.abs(median - avg);
     }
 
-    public void setStringListMap(Map<String, List<Ticket>> stringListMap) {
-        this.stringListMap = stringListMap;
+    public void setStringListMap(List<Ticket> ticketList) {
+        this.stringLis = ticketList;
 
     }
 
-    private Map<String, Double> calculateAvgPrice() {
-        Map<String, Double> price = new HashMap<>();
-
-        for (var entry : stringListMap.entrySet()) {
-            var k = entry.getKey();
-            var v = entry.getValue();
-            var diff = v.stream()
-                    .map(Ticket::getPrice)
-                    .mapToInt(el -> el)
-                    .summaryStatistics()
-                    .getAverage();
-            price.put(k, diff);
-
-        }
-        return price;
+    private Double calculateAvgPrice() {
+        return stringLis.stream().map(Ticket::getPrice)
+                .mapToDouble(el -> el)
+                .summaryStatistics()
+                .getAverage();
     }
 
-    private Map<String, Double> calculateMedian() {
-        Map<String, Double> resMap = new HashMap<>();
+    private Double calculateMedian() {
+        int size = stringLis.size();
+        var value = stringLis.stream().map(Ticket::getPrice).sorted().collect(Collectors.toList());
 
-        for (var entry : stringListMap.entrySet()) {
-            var key = entry.getKey();
-            var value = entry.getValue().stream().map(Ticket::getPrice).sorted().collect(Collectors.toList());
-            var size = value.size();
 
-            if (value.size() % 2 == 0) {
-                var val = (value.get(size / 2 - 1) + value.get(size / 2) / 2.0);
-                resMap.put(key, val);
-            } else {
-                var val1 = Double.valueOf((value.get(size / 2)));
-                resMap.put(key, val1);
-            }
+        if (value.size() % 2 == 0) {
+            return (value.get(size / 2 - 1) + value.get(size / 2) / 2.0);
+
+        } else {
+            return Double.valueOf((value.get(size / 2)));
+
         }
 
-        return resMap;
     }
 }
-

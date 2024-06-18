@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Main {
-   private static FlyingOperation flyingOperation = new FlyingOperation();
-   private static PriceCalculation priceCalculation = new  PriceCalculation();
+    private static final FlyingOperation flyingOperation = new FlyingOperation();
+    private static final PriceCalculation priceCalculation = new  PriceCalculation();
 
 
 
@@ -37,16 +37,16 @@ public class Main {
                         + "проверьте корректность введенных данных");
             }
 
-         var currentMap =  flyingOperation.collectCarrierToTicketMap(relevantTickets);
-        var resultMap =  flyingOperation.minimumTimeToFly(currentMap);
-        priceCalculation.setStringListMap(currentMap);
-        var diffAvgAndMedian =  priceCalculation.diffAvgAndMedian();
+            var currentMap =  flyingOperation.collectCarrierToTicketMap(relevantTickets);
+            var resultMap =  flyingOperation.minimumTimeToFly(currentMap);
+            priceCalculation.setStringListMap(relevantTickets);
+            var diffAvgAndMedian =  priceCalculation.diffAvgAndMedian();
 
 
-        for (var entry : resultMap.entrySet()){
-            System.out.println("For the airline " + entry.getKey() + " Minimum flight time " + entry.getValue() +
-                    " Diff between avg and median = " + diffAvgAndMedian.get(entry.getKey()));
-        }
+            for (var entry : resultMap.entrySet()){
+                System.out.println("For the airline " + entry.getKey() + " Minimum flight time " + entry.getValue() +
+                        " Diff between avg and median = " + diffAvgAndMedian);
+            }
 
 
 
@@ -57,3 +57,4 @@ public class Main {
 
 
 }
+
